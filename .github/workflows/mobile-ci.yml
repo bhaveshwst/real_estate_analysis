@@ -1,0 +1,124 @@
+name: Mobile CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['re-mobile/**']
+  pull_request:
+    branches: [main]
+    paths: ['re-mobile/**']
+
+defaults:
+  run:
+    working-directory: re-mobile
+
+env:
+  EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+jobs:
+  # ── Quality checks ──────────────────────
+  quality:
+    name: Lint + Typecheck + Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: re-mobile/package-lock.json
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test -- --coverage --passWithNoTests
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: re-mobile/coverage/
+
+  # ── Staging build (on develop push) ─────
+  build-staging:
+    name: Build Staging
+    needs: quality
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: re-mobile/package-lock.json
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: npm ci
+
+      - name: Build iOS (staging)
+        run: eas build --platform ios --profile preview --non-interactive
+
+      - name: Build Android (staging)
+        run: eas build --platform android --profile preview --non-interactive
+
+  # ── Production build + submit (on main push) ──
+  build-production:
+    name: Build & Submit Production
+    needs: quality
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: re-mobile/package-lock.json
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: npm ci
+
+      # Build both platforms
+      - name: Build iOS (production)
+        run: eas build --platform ios --profile production --non-interactive
+
+      - name: Build Android (production)
+        run: eas build --platform android --profile production --non-interactive
+
+      # Submit to stores
+      - name: Submit to App Store
+        run: eas submit --platform ios --profile production --non-interactive
+
+      - name: Submit to Play Store
+        run: eas submit --platform android --profile production --non-interactive
+
+  # ── OTA update (for JS-only changes) ────
+  ota-update:
+    name: OTA Update
+    needs: quality
+    if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[ota]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: re-mobile/package-lock.json
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: npm ci
+      - run: eas update --channel production --message "${{ github.event.head_commit.message }}"
