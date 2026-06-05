@@ -14,6 +14,7 @@ import { useAppSelector } from '@/store';
 import { selectSearchState } from '@/store/slices/search.slice';
 import { useInfinitePropertySearch, usePrefetchProperty } from '../hooks/use-search';
 import { PropertyListCard } from '../components';
+import { AppVersionBadge } from '@/components/AppVersionBadge';
 import { palette, spacing, typography } from '@/theme';
 import type { SearchStackParamList } from '@/types';
 
@@ -59,7 +60,9 @@ export function SearchResultsScreen() {
             </Text>
           )}
         </View>
-        <View style={{ width: 50 }} />
+        <View style={styles.headerVersion}>
+          <AppVersionBadge />
+        </View>
       </View>
 
       {/* Results */}
@@ -129,6 +132,7 @@ const styles = StyleSheet.create({
   headerCenter: { flex: 1, alignItems: 'center' },
   headerQuery: { ...typography.labelLg, color: palette.navy },
   headerCount: { ...typography.bodySm, color: palette.gray500, marginTop: 1 },
+  headerVersion: { minWidth: 44, alignItems: 'flex-end', justifyContent: 'center' },
   listContent: { padding: spacing.lg, paddingBottom: spacing['3xl'] },
   separator: { height: spacing.md },
   footer: { paddingVertical: spacing.xl },

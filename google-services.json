@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "679641947742",
+    "project_id": "real-estate-analysis-c5177",
+    "storage_bucket": "real-estate-analysis-c5177.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679641947742:android:41d94bdff01e495cc8decf",
+        "android_client_info": {
+          "package_name": "com.realestate.analytics"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAooZ0eZWWb3-tICDb4c0W-J6ffk2NRCkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

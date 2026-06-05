@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { ScrollView, RefreshControl, StyleSheet, StatusBar, View, Text } from 'react-native';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { setQuery } from '@/store/slices/search.slice';
@@ -92,11 +93,13 @@ export function DashboardScreen({ navigation }: DashboardScreenProps) {
   }, [navigation]);
 
   return (
-    <ScrollView
+    <View style={styles.root}>
+      <ScreenAppBar backgroundColor={palette.gray50} />
+      <ScrollView
       style={styles.container}
       contentContainerStyle={[
         styles.content,
-        { paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + spacing['3xl'] },
+        { paddingTop: spacing.lg, paddingBottom: insets.bottom + spacing['3xl'] },
       ]}
       showsVerticalScrollIndicator={false}
       refreshControl={
@@ -167,10 +170,12 @@ export function DashboardScreen({ navigation }: DashboardScreenProps) {
         Market data powered by ATTOM · Updated every 4 hours
       </Text>
     </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  root: { flex: 1, backgroundColor: palette.gray50 },
   container: { flex: 1, backgroundColor: palette.gray50 },
   content: {},
   padded: { paddingHorizontal: spacing.xl },

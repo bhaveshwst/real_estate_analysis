@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { login, selectAuth, clearError } from '@/store/slices/auth.slice';
 import { useAuthForm, loginSchema } from '../hooks/use-auth-form';
 import { FormField } from '../components/FormField';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import { palette, spacing, radius, typography, layout } from '@/theme';
 import type { AuthStackParamList } from '@/types';
 
@@ -33,7 +34,7 @@ export function LoginScreen() {
   // Clear server error when user starts typing
   useEffect(() => {
     if (serverError) dispatch(clearError());
-  }, [form.values.email, form.values.password]);
+  }, [dispatch, serverError, form.values.email, form.values.password]);
 
   const handleSubmit = useCallback(() => {
     const validated = form.validate();
@@ -56,10 +57,11 @@ export function LoginScreen() {
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      <ScreenAppBar />
       <ScrollView
         contentContainerStyle={[
           styles.content,
-          { paddingTop: insets.top + spacing['4xl'], paddingBottom: insets.bottom + spacing['2xl'] },
+          { paddingTop: spacing['2xl'], paddingBottom: insets.bottom + spacing['2xl'] },
         ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}

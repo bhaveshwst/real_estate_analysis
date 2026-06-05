@@ -11,6 +11,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import { usePropertyAnalytics } from '../hooks/use-analytics';
 import {
   AreaChart,
@@ -43,8 +44,11 @@ export function PropertyAnalyticsScreen() {
 
   if (isLoading || !detail) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={palette.teal} />
+      <View style={styles.loadingRoot}>
+        <ScreenAppBar backgroundColor={palette.gray50} />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={palette.teal} />
+        </View>
       </View>
     );
   }
@@ -54,19 +58,25 @@ export function PropertyAnalyticsScreen() {
       style={styles.container}
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + spacing['3xl'] }]}
     >
-      {/* Header */}
-      <View style={[styles.header, { paddingTop: insets.top + spacing.md }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={12}>
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
-        <View style={styles.headerInfo}>
-          <Text style={styles.headerAddress} numberOfLines={1}>
-            {detail.addressLine1}
-          </Text>
-          <Text style={styles.headerLocation}>
-            {detail.city}, {detail.state} {detail.zipCode}
-          </Text>
-        </View>
+      <View style={styles.headerBlock}>
+        <ScreenAppBar
+          backgroundColor={palette.white}
+          leading={
+            <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={12}>
+              <Text style={styles.backText}>← Back</Text>
+            </TouchableOpacity>
+          }
+          center={
+            <View style={styles.headerInfo}>
+              <Text style={styles.headerAddress} numberOfLines={1}>
+                {detail.addressLine1}
+              </Text>
+              <Text style={styles.headerLocation}>
+                {detail.city}, {detail.state} {detail.zipCode}
+              </Text>
+            </View>
+          }
+        />
       </View>
 
       {/* ══════════════════════════════════════ */}
@@ -186,11 +196,12 @@ export function PropertyAnalyticsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: palette.gray50 },
   content: { paddingHorizontal: spacing.xl },
+  loadingRoot: { flex: 1, backgroundColor: palette.gray50 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 
-  header: { marginBottom: spacing.md },
-  backText: { ...typography.labelLg, color: palette.teal, marginBottom: spacing.md },
-  headerInfo: {},
+  headerBlock: { marginBottom: spacing.md },
+  backText: { ...typography.labelLg, color: palette.teal },
+  headerInfo: { alignItems: 'center' },
   headerAddress: { ...typography.headingLg, color: palette.navy },
   headerLocation: { ...typography.bodyMd, color: palette.gray500, marginTop: 2 },
 

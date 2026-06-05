@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import { palette, spacing, radius, typography } from '@/theme';
 
 interface LoadingStateProps {
@@ -8,9 +9,12 @@ interface LoadingStateProps {
 
 export function LoadingState({ message = 'Loading property...' }: LoadingStateProps) {
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color={palette.teal} />
-      <Text style={styles.loadingText}>{message}</Text>
+    <View style={styles.full}>
+      <ScreenAppBar />
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color={palette.teal} />
+        <Text style={styles.loadingText}>{message}</Text>
+      </View>
     </View>
   );
 }
@@ -29,33 +33,37 @@ export function ErrorState({
   onBack,
 }: ErrorStateProps) {
   return (
-    <View style={styles.container}>
-      {/* Error icon (CSS-drawn X in circle) */}
-      <View style={styles.errorIcon}>
-        <View style={[styles.errorLine, styles.errorLine1]} />
-        <View style={[styles.errorLine, styles.errorLine2]} />
-      </View>
+    <View style={styles.full}>
+      <ScreenAppBar />
+      <View style={styles.container}>
+        {/* Error icon (CSS-drawn X in circle) */}
+        <View style={styles.errorIcon}>
+          <View style={[styles.errorLine, styles.errorLine1]} />
+          <View style={[styles.errorLine, styles.errorLine2]} />
+        </View>
 
-      <Text style={styles.errorTitle}>{title}</Text>
-      <Text style={styles.errorMessage}>{message}</Text>
+        <Text style={styles.errorTitle}>{title}</Text>
+        <Text style={styles.errorMessage}>{message}</Text>
 
-      <View style={styles.actionRow}>
-        {onRetry && (
-          <TouchableOpacity style={styles.retryBtn} onPress={onRetry} activeOpacity={0.8}>
-            <Text style={styles.retryText}>Try again</Text>
-          </TouchableOpacity>
-        )}
-        {onBack && (
-          <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.8}>
-            <Text style={styles.backText}>Go back</Text>
-          </TouchableOpacity>
-        )}
+        <View style={styles.actionRow}>
+          {onRetry && (
+            <TouchableOpacity style={styles.retryBtn} onPress={onRetry} activeOpacity={0.8}>
+              <Text style={styles.retryText}>Try again</Text>
+            </TouchableOpacity>
+          )}
+          {onBack && (
+            <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.8}>
+              <Text style={styles.backText}>Go back</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  full: { flex: 1, backgroundColor: palette.white },
   container: {
     flex: 1,
     justifyContent: 'center',

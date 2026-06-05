@@ -11,6 +11,7 @@ import {
 import { useRoute, useNavigation } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import type { AnalyticsPeriod } from '@/services/api';
 import { useMarketAnalytics } from '../hooks/use-analytics';
 import {
@@ -48,8 +49,11 @@ export function MarketAnalyticsScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={palette.teal} />
+      <View style={styles.loadingRoot}>
+        <ScreenAppBar backgroundColor={palette.gray50} />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={palette.teal} />
+        </View>
       </View>
     );
   }
@@ -62,16 +66,21 @@ export function MarketAnalyticsScreen() {
         <RefreshControl refreshing={isFetching} onRefresh={refetch} tintColor={palette.teal} />
       }
     >
-      {/* Header */}
-      <View style={[styles.header, { paddingTop: insets.top + spacing.md }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={12}>
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
-        <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>Market analytics</Text>
-          <Text style={styles.headerSubtitle}>{params.zipCode}</Text>
-        </View>
-        <View style={{ width: 50 }} />
+      <View style={styles.headerBlock}>
+        <ScreenAppBar
+          backgroundColor={palette.white}
+          leading={
+            <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={12}>
+              <Text style={styles.backText}>← Back</Text>
+            </TouchableOpacity>
+          }
+          center={
+            <View style={styles.headerCenter}>
+              <Text style={styles.headerTitle}>Market analytics</Text>
+              <Text style={styles.headerSubtitle}>{params.zipCode}</Text>
+            </View>
+          }
+        />
       </View>
 
       {/* Period selector */}
@@ -133,14 +142,11 @@ export function MarketAnalyticsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: palette.gray50 },
   content: { paddingHorizontal: spacing.xl },
+  loadingRoot: { flex: 1, backgroundColor: palette.gray50 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.lg,
-  },
-  backText: { ...typography.labelLg, color: palette.teal, width: 50 },
+  headerBlock: { marginBottom: spacing.lg },
+  backText: { ...typography.labelLg, color: palette.teal },
   headerCenter: { flex: 1, alignItems: 'center' },
   headerTitle: { ...typography.headingMd, color: palette.navy },
   headerSubtitle: { ...typography.bodySm, color: palette.gray500 },

@@ -12,6 +12,7 @@ import {
   type TextInput as TextInputType,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AppVersionBadge } from '@/components/AppVersionBadge';
 import { palette, spacing, radius, typography, layout, shadow } from '@/theme';
 import type { AutocompleteResult } from '@/types';
 
@@ -53,8 +54,9 @@ export function AutocompleteBar({
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + spacing.sm }]}>
-      {/* ── Input row ── */}
-      <View style={styles.inputRow}>
+      <View style={styles.chrome}>
+        {/* ── Input row ── */}
+        <View style={styles.inputRow}>
         <View style={styles.inputWrapper}>
           {/* Search icon */}
           <View style={styles.searchIcon}>
@@ -106,6 +108,11 @@ export function AutocompleteBar({
             </View>
           )}
         </TouchableOpacity>
+        </View>
+
+        <View style={styles.versionRow}>
+          <AppVersionBadge />
+        </View>
       </View>
 
       {/* ── Autocomplete dropdown ── */}
@@ -155,12 +162,24 @@ const styles = StyleSheet.create({
     zIndex: 100,
     backgroundColor: 'transparent',
   },
+  chrome: {
+    backgroundColor: palette.white,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: palette.gray200,
+    paddingBottom: spacing.xs,
+  },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.sm,
     gap: spacing.sm,
+  },
+  versionRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xs,
   },
   inputWrapper: {
     flex: 1,

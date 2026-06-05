@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { register, selectAuth, clearError } from '@/store/slices/auth.slice';
 import { useAuthForm, registerSchema } from '../hooks/use-auth-form';
 import { FormField } from '../components/FormField';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import { palette, spacing, radius, typography, layout } from '@/theme';
 import type { AuthStackParamList } from '@/types';
 
@@ -81,10 +82,11 @@ export function RegisterScreen() {
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      <ScreenAppBar />
       <ScrollView
         contentContainerStyle={[
           styles.content,
-          { paddingTop: insets.top + spacing['2xl'], paddingBottom: insets.bottom + spacing['2xl'] },
+          { paddingTop: spacing.xl, paddingBottom: insets.bottom + spacing['2xl'] },
         ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}

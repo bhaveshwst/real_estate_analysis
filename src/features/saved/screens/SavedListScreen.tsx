@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSavedProperties, useSavedListNames } from '../hooks/use-saved';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import { palette, spacing, radius, typography, shadow } from '@/theme';
 import type { SavedStackParamList, SavedProperty } from '@/types';
 
@@ -10,13 +12,17 @@ type Nav = NativeStackNavigationProp<SavedStackParamList, 'SavedList'>;
 
 export function SavedListScreen() {
   const navigation = useNavigation<Nav>();
+  const insets = useSafeAreaInsets();
   const [activeList, setActiveList] = useState<string | undefined>();
   const { data: lists } = useSavedListNames();
   const { data, isLoading } = useSavedProperties(1, activeList);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Saved properties</Text>
+      <ScreenAppBar backgroundColor={palette.gray50} />
+      <Text style={[styles.title, { paddingTop: spacing.md }]}>
+        Saved properties
+      </Text>
 
       {/* List name pills */}
       {lists && lists.length > 0 && (
@@ -42,7 +48,7 @@ export function SavedListScreen() {
       <FlatList
         data={data?.items ?? []}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + spacing['3xl'] }]}
         renderItem={({ item }: { item: SavedProperty }) => (
           <TouchableOpacity
             style={styles.card}
@@ -78,7 +84,7 @@ export function SavedListScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: palette.gray50 },
-  title: { ...typography.displaySm, color: palette.navy, paddingHorizontal: spacing.xl, paddingTop: spacing['3xl'] },
+  title: { ...typography.displaySm, color: palette.navy, paddingHorizontal: spacing.xl },
   pillsRow: { paddingHorizontal: spacing.xl, paddingVertical: spacing.lg, gap: spacing.sm },
   pill: { paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radius.full, backgroundColor: palette.gray100 },
   pillActive: { backgroundColor: palette.teal },

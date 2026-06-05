@@ -38,6 +38,7 @@ import {
 import { ANIMATION } from '@/shared/constants';
 import { formatCurrency, formatAddress } from '@/shared/utils/format';
 import { logger } from '@/shared/utils/logger';
+import { AppVersionBadge } from '@/components/AppVersionBadge';
 import { palette, spacing, radius, typography, shadow } from '@/theme';
 import type { DashboardStackParamList } from '@/types';
 
@@ -141,6 +142,7 @@ export function PropertyDetailScreen() {
             </Text>
             <Text style={styles.compactAddress} numberOfLines={1}>{property.addressLine1}</Text>
           </Animated.View>
+          <AppVersionBadge style={styles.navVersion} />
           <View style={styles.navActions}>
             <TouchableOpacity style={styles.navBtn} onPress={handleShare} hitSlop={12}>
               <Text style={styles.navBtnText}>↗</Text>
@@ -254,6 +256,7 @@ const styles = StyleSheet.create({
   compactTitle: { flex: 1, alignItems: 'center', paddingHorizontal: spacing.md },
   compactPrice: { ...typography.labelLg, color: palette.navy },
   compactAddress: { ...typography.bodySm, color: palette.gray500 },
+  navVersion: { marginRight: spacing.xs, alignSelf: 'center' },
   navActions: { flexDirection: 'row', gap: spacing.sm, alignItems: 'center' },
   scrollContent: {},
   savePillRow: {

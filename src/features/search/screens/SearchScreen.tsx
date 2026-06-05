@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   // Toggle positioning
   togglePosition: {
     position: 'absolute',
-    top: 110, // below search bar
+    top: 134, // below search bar + version row
     right: spacing.lg,
     zIndex: 50,
   },

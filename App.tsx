@@ -6,6 +6,8 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { store } from '@/store';
 import { queryClient } from '@/services/api/query-client';
+import { ForceUpdateGate } from '@/components/ForceUpdateGate';
+import { OfflineConnectivityBanner } from '@/components/OfflineConnectivityBanner';
 import { RootNavigator } from '@/navigation';
 import { palette } from '@/theme';
 
@@ -24,8 +26,12 @@ export default function App() {
       <SafeAreaProvider>
         <ReduxProvider store={store}>
           <QueryClientProvider client={queryClient}>
-            <StatusBar barStyle="dark-content" backgroundColor={palette.white} />
-            <RootNavigator />
+            <OfflineConnectivityBanner>
+              <StatusBar barStyle="dark-content" backgroundColor={palette.white} />
+              <ForceUpdateGate>
+                <RootNavigator />
+              </ForceUpdateGate>
+            </OfflineConnectivityBanner>
           </QueryClientProvider>
         </ReduxProvider>
       </SafeAreaProvider>

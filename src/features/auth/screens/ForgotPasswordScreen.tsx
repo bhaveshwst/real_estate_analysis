@@ -2,19 +2,18 @@ import React, { useState, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { authApi } from '@/services/api';
 import { useAuthForm, forgotPasswordSchema } from '../hooks/use-auth-form';
 import { FormField } from '../components/FormField';
 import { extractErrorMessage } from '@/shared/utils/error';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import { palette, spacing, radius, typography, layout } from '@/theme';
 
 const INITIAL = { email: '' };
 
 export function ForgotPasswordScreen() {
   const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
   const form = useAuthForm(forgotPasswordSchema, INITIAL);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -41,7 +40,8 @@ export function ForgotPasswordScreen() {
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={[styles.content, { paddingTop: insets.top + spacing['2xl'] }]}>
+      <ScreenAppBar />
+      <View style={[styles.content, { paddingTop: spacing.lg }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={12}>
           <Text style={styles.backText}>← Back to login</Text>
         </TouchableOpacity>

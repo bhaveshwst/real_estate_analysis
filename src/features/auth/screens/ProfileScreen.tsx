@@ -1,15 +1,19 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { logout, selectUser } from '@/store/slices/auth.slice';
+import { ScreenAppBar } from '@/components/ScreenAppBar';
 import { palette, spacing, radius, typography, layout } from '@/theme';
 
 export function ProfileScreen() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: insets.bottom + spacing.lg }]}>
+      <ScreenAppBar />
       <View style={styles.avatar}>
         <Text style={styles.initials}>
           {user?.firstName?.[0]}{user?.lastName?.[0]}
@@ -31,7 +35,7 @@ export function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: palette.white, alignItems: 'center', paddingTop: spacing['4xl'] },
+  container: { flex: 1, backgroundColor: palette.white, alignItems: 'center', paddingTop: spacing.xl },
   avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: palette.tealLight, justifyContent: 'center', alignItems: 'center', marginBottom: spacing.lg },
   initials: { ...typography.displaySm, color: palette.teal },
   name: { ...typography.headingLg, color: palette.navy },
